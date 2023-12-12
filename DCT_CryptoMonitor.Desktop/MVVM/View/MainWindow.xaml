@@ -19,16 +19,11 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
         </Grid.RowDefinitions>
-        
-        <ComboBox Grid.Column="0" Grid.Row="0"
-                  x:Name="ComboBox"
-                  ItemsSource="{Binding Path=Currencies}"
-                  SelectedItem="{Binding Path=SelectedCurrency}"
-        />
+        <TextBlock Grid.Row="0" Grid.Column="0">Hello</TextBlock>
         <Button Grid.Row="0" Grid.Column="1" Click="ButtonBase_OnClick">Yeah I work</Button>
-        <StackPanel Grid.Row="1" Grid.Column="1">
-            <DataGrid ItemsSource="{Binding Path=Coins}">
-            </DataGrid>
-        </StackPanel>
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
+                <DataGrid ItemsSource="{Binding Path=Coins}">
+                </DataGrid>
+        </ScrollViewer>
     </Grid>
 </Window>

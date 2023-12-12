@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
+using DCT_CryptoMonitor.Core.Models;
 using DCT_CryptoMonitor.Core.Services;
 using DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
 
@@ -16,19 +18,15 @@ public partial class MainWindow : Window
     {
         _coinService = coinService;
         InitializeComponent();
+        Console.WriteLine("MainWindow initialized");
     }
     
     protected override async void OnInitialized(EventArgs e)
     {
-        
-        var currencies = await _coinService.GetSupportedVsCurrencies();
         DataContext = new MainViewModel
         {
-            Currencies = currencies,
-            SelectedCurrency = currencies.Find(c => c == "usd") ?? currencies[0],
-            Coins = await _coinService.GetTopMarketCapCoins()
+            Coins = new ObservableCollection<CoinMinimal>(await _coinService.GetTopMarketCapCoins())
         };
-        // ComboBox.ItemsSource = (DataContext as MainViewModel)!.Currencies;
         base.OnInitialized(e);
     }
 

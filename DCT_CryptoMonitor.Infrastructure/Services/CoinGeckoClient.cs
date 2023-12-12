@@ -1,7 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Web;
 using DCT_CryptoMonitor.Core.Models;
 using DCT_CryptoMonitor.Core.Services;
+using DCT_CryptoMonitor.Infrastructure.Configurations;
 
 namespace DCT_CryptoMonitor.Infrastructure.Services;
 
@@ -10,11 +12,13 @@ public class CoinGeckoClient : ICoinService
     private readonly HttpClient _httpClient;
     private readonly string _apiKey;
 
-    public CoinGeckoClient(HttpClient httpClient, string apiKey)
+    public CoinGeckoClient(HttpClient httpClient, ApiOptions apiOptions)
     {
         _httpClient = httpClient;
-        _apiKey = apiKey;
-        _httpClient.BaseAddress = new Uri("https://api.coingecko.com/api/v3/");
+        _apiKey = apiOptions.ApiKey;
+        _httpClient.BaseAddress = new Uri(apiOptions.Url);
+        _httpClient.DefaultRequestHeaders.Add("x_cg_demo_api_key", _apiKey);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         // ping
         var ping = GetAsync("ping").Result;
         
@@ -64,7 +68,9 @@ public class CoinGeckoClient : ICoinService
         }
         
         var content = await response.Content.ReadAsStringAsync();
+        
         var coins = JsonSerializer.Deserialize<List<CoinMinimal>>(content);
+        
         return coins ?? new List<CoinMinimal>();
     }
 
