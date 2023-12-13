@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
 using DCT_CryptoMonitor.Core.Models;
 using DCT_CryptoMonitor.Core.Services;
 using DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
@@ -18,15 +17,19 @@ public partial class MainWindow : Window
     {
         _coinService = coinService;
         InitializeComponent();
-        Console.WriteLine("MainWindow initialized");
     }
     
     protected override async void OnInitialized(EventArgs e)
     {
+        var coins = await _coinService.GetTopMarketCapCoins();
         DataContext = new MainViewModel
         {
-            Coins = new ObservableCollection<CoinMinimal>(await _coinService.GetTopMarketCapCoins())
+            Coins = new ObservableCollection<CoinMinimal>(coins),
+            OneCoin = coins[0]
         };
+        // add coin cards
+        
+        
         base.OnInitialized(e);
     }
 

@@ -2,8 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.ViewModel"
-             xmlns:view="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.View">
+             xmlns:view="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.View" 
+             xmlns:components="clr-namespace:DCT_CryptoMonitor.Desktop.Components" xmlns:converters="clr-namespace:DCT_CryptoMonitor.Desktop.Converters">
     <Application.Resources>
-         
+        <!--<ResourceDictionary>
+            <converters:CoinPriceConverter x:Key="CoinConverter" />
+        </ResourceDictionary>-->
     </Application.Resources>
 </Application>

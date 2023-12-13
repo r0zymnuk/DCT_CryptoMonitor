@@ -4,8 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.ViewModel"
+        xmlns:components="clr-namespace:DCT_CryptoMonitor.Desktop.Components" xmlns:converters="clr-namespace:DCT_CryptoMonitor.Desktop.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        MinWidth="1000"
+        MinHeight="600"
+        Title="MainWindow" Height="600" Width="1200">
+    <!--<Window.Resources>
+        <converters:CoinPriceConverter x:Key="CoinConverter"/>
+    </Window.Resources>-->
+    
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
@@ -13,17 +20,71 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0">Hello</TextBlock>
         <Button Grid.Row="0" Grid.Column="1" Click="ButtonBase_OnClick">Yeah I work</Button>
-        <ScrollViewer Grid.Row="1" Grid.Column="1">
-                <DataGrid ItemsSource="{Binding Path=Coins}">
-                </DataGrid>
-        </ScrollViewer>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid VerticalAlignment="Center" Margin="0, 0, 30, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="#"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock Text="(Symbol) Name" Grid.Column="1"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Left"/>
+
+                <TextBlock Text="Price, USD" Grid.Column="2"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Right"/>
+
+                <TextBlock Text="24h %" Grid.Column="3"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Right"/>
+
+                <TextBlock Text="Volume 24h, USD" Grid.Column="4"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Right"/>
+
+                <TextBlock Text="Market Cap, USD" Grid.Column="5"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Right"/>
+            </Grid>
+            
+            <ListBox ItemsSource="{Binding Coins}" Grid.Row="1"
+                     HorizontalAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Set the CustomTextProperty using Binding -->
+                        <components:CoinCard Coin="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
 </Window>

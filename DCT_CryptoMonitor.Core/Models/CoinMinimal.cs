@@ -9,4 +9,6 @@ public class CoinMinimal
     public decimal MarketCap { get; set; }
     public int MarketCapRank { get; set; }
     public decimal PriceChangePercentage24H { get; set; }
+    public decimal Volume24H { get; set; }
+    public decimal Supply { get; set; }
 }

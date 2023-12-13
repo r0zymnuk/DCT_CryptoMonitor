@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Web;
 using DCT_CryptoMonitor.Core.Models;
 using DCT_CryptoMonitor.Core.Services;
@@ -53,24 +52,23 @@ public class CoinCapClient : ICoinService
         }
         
         var content = await response.Content.ReadAsStringAsync();
-        var coins = new List<CoinMinimal>();
         var data = JsonSerializer.Deserialize<JsonElement>(content);
 
-        
-        
-        foreach (var coin in data.GetProperty("data").EnumerateArray()){
-            coins.Add(new CoinMinimal
+        return data.GetProperty("data")
+            .EnumerateArray()
+            .Select(coin => new CoinMinimal
             {
-                Id = coin.GetProperty("id").GetString(),
-                Symbol = coin.GetProperty("symbol").GetString(),
-                Name = coin.GetProperty("name").GetString(),
-                CurrentPrice = ConvertCoinCapToDecimal(coin.GetProperty("priceUsd").GetString()),
-                MarketCap = ConvertCoinCapToDecimal(coin.GetProperty("marketCapUsd").GetString()),
+                Id = coin.GetProperty("id").GetString()!,
+                Symbol = coin.GetProperty("symbol").GetString()!,
+                Name = coin.GetProperty("name").GetString()!,
+                CurrentPrice = ConvertCoinCapToDecimal(coin.GetProperty("priceUsd").GetString()!),
+                MarketCap = ConvertCoinCapToDecimal(coin.GetProperty("marketCapUsd").GetString()!),
                 MarketCapRank = Convert.ToInt32(coin.GetProperty("rank").GetString()),
-                PriceChangePercentage24H = ConvertCoinCapToDecimal(coin.GetProperty("changePercent24Hr").GetString())
-            });
-        }
-        return coins;
+                PriceChangePercentage24H = ConvertCoinCapToDecimal(coin.GetProperty("changePercent24Hr").GetString()!),
+                Volume24H = ConvertCoinCapToDecimal(coin.GetProperty("volumeUsd24Hr").GetString()!),
+                Supply = ConvertCoinCapToDecimal(coin.GetProperty("supply").GetString()!)
+            })
+            .ToList();
     }
 
     public async Task<Coin> GetCoinById(string id, string currency = "usd")

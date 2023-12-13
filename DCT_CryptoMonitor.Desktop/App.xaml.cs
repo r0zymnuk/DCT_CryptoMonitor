@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using DCT_CryptoMonitor.Core.Models;
 using DCT_CryptoMonitor.Core.Services;
 using DCT_CryptoMonitor.Desktop.MVVM.View;
 using DCT_CryptoMonitor.Infrastructure.Configurations;
@@ -24,7 +23,7 @@ public partial class App : Application
         // services.Configure<ApiOptionsList>(c => c.ApiOptions = AddConfiguration().GetSection("Crypto").Get<Dictionary<string, ApiOptions>>()!);
         services.AddHttpClient();
         // services.AddSingleton<ICoinService, CoinGeckoClient>(c => new CoinGeckoClient(new HttpClient(), c.GetRequiredService<IConfiguration>().GetSection("Crypto:CoinGecko").Get<ApiOptions>()));
-        services.AddSingleton<ICoinService, CoinCapClient>(c => new CoinCapClient(new HttpClient(), c.GetRequiredService<IConfiguration>().GetSection("Crypto:CoinCap").Get<ApiOptions>()));
+        services.AddSingleton<ICoinService, CoinCapClient>(c => new CoinCapClient(new HttpClient(), c.GetRequiredService<IConfiguration>().GetSection("Crypto:CoinCap").Get<ApiOptions>()!));
         
         services.AddSingleton<MainWindow>();
         
@@ -38,7 +37,7 @@ public partial class App : Application
         mainWindow.Show();
     }
 
-    private IConfiguration AddConfiguration()
+    private static IConfiguration AddConfiguration()
     {
         var builder = new ConfigurationBuilder();
         builder.AddJsonFile("appsettings.json", false, true);
