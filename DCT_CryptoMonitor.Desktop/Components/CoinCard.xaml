@@ -11,6 +11,19 @@
         <converters:CoinPriceConverter x:Key="CoinPriceConverter"/>
         <converters:PercentageConverter x:Key="PercentageConverter"/>
         <converters:MarketCapConverter x:Key="MarketCapConverter" />
+        <converters:IsGainingConditionConverter x:Key="IsGainingConditionConverter"/>
+
+        <Style x:Key="CoinLossTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+
+        <Style x:Key="CoinGainTextStyle" TargetType="TextBlock" BasedOn="{StaticResource CoinLossTextStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, ElementName=PercentageChange24H, Converter={StaticResource IsGainingConditionConverter}}" Value="True">
+                    <Setter Property="Foreground" Value="Green"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Border BorderThickness="2"
@@ -56,8 +69,9 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"/>
 
-            <TextBlock Grid.Column="3" 
-                       Text="{Binding Coin.PriceChangePercentage24H, ElementName=Root, Converter={StaticResource PercentageConverter}, FallbackValue=+50%}" 
+            <TextBlock Grid.Column="3" x:Name="PercentageChange24H"
+                       Style="{StaticResource CoinGainTextStyle}"
+                       Text="{Binding Coin.PriceChangePercentage24H, ElementName=Root, Converter={StaticResource PercentageConverter}, FallbackValue=0.0%}" 
                        FontSize="16" FontWeight="Bold"
                        Margin="0,0,10,0"
                        VerticalAlignment="Center"
@@ -76,6 +90,9 @@
                        Margin="0,0,10,0"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"/>
+            
+            
         </Grid>
     </Border>
+
 </UserControl>

@@ -8,11 +8,8 @@
         mc:Ignorable="d"
         MinWidth="1000"
         MinHeight="600"
-        Title="MainWindow" Height="600" Width="1200">
-    <!--<Window.Resources>
-        <converters:CoinPriceConverter x:Key="CoinConverter"/>
-    </Window.Resources>-->
-    
+        Title="DCT CryptoMonitor" Height="600" Width="1200">
+
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
@@ -24,7 +21,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="8*"></RowDefinition>
+            <RowDefinition Height="14*"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0">Hello</TextBlock>
         <Button Grid.Row="0" Grid.Column="1" Click="ButtonBase_OnClick">Yeah I work</Button>

@@ -13,9 +13,9 @@ public class PercentageConverter : IValueConverter
     {
         bool success = decimal.TryParse(value.ToString(), out decimal price);
         if (success)
-            return $"{price/100:P2}";
+            return $"{(price>0?"+":"")}{price/100:P2}";
 
-        return "+50%";
+        return "0%";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
