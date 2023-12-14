@@ -30,8 +30,8 @@
             BorderBrush="Black"
             CornerRadius="5"
             Background="White"
-    >
-        <Grid >
+            MouseLeftButtonDown="NavigateToCoinView">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="5*" />

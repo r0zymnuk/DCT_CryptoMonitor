@@ -8,7 +8,7 @@ public class MarketCapConverter : IValueConverter
     {
         string[] scales = { "", "K", "M", "B", "T", "Q"};
 
-        bool success = decimal.TryParse(value.ToString(), out decimal cap);
+        decimal.TryParse(value.ToString(), out decimal cap);
         int scale = 0;
         
         while (cap > 1000)

@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="DCT_CryptoMonitor.Desktop.Components.CoinCardList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DCT_CryptoMonitor.Desktop.Components"
+             mc:Ignorable="d" 
+             x:Name="ControlRoot"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White">
+    <Grid Grid.Row="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Center" Margin="0, 0, 30, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="#"
+   FontSize="15"
+   FontWeight="Bold"
+   HorizontalAlignment="Center"/>
+
+            <TextBlock Text="(Symbol) Name" Grid.Column="1"
+   FontSize="15"
+   FontWeight="Bold"
+   HorizontalAlignment="Left"/>
+
+            <TextBlock Text="Price, USD" Grid.Column="2"
+   FontSize="15"
+   FontWeight="Bold"
+   HorizontalAlignment="Right"/>
+
+            <TextBlock Text="24h %" Grid.Column="3"
+   FontSize="15"
+   FontWeight="Bold"
+   HorizontalAlignment="Right"/>
+
+            <TextBlock Text="Volume 24h, USD" Grid.Column="4"
+   FontSize="15"
+   FontWeight="Bold"
+   HorizontalAlignment="Right"/>
+
+            <TextBlock Text="Market Cap, USD" Grid.Column="5"
+   FontSize="15"
+   FontWeight="Bold"
+   HorizontalAlignment="Right"/>
+        </Grid>
+
+        <ListBox ItemsSource="{Binding Coins}" Grid.Row="1"
+                 
+             HorizontalAlignment="Stretch"
+             HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=5}"
+             >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <!-- Set the CustomTextProperty using Binding -->
+                    <local:CoinCard Coin="{Binding}" NavigateToCoinCommand="{Binding ElementName=ControlRoot, Path=ListNavigateToCoinCommand}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
+    </Grid>
+</UserControl>

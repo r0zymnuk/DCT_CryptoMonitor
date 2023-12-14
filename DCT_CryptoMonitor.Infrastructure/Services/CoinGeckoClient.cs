@@ -51,7 +51,7 @@ public class CoinGeckoClient : ICoinService
         return JsonSerializer.Deserialize<List<string>>(content) ?? new List<string>();
     }
 
-    public async Task<List<CoinMinimal>> GetTopMarketCapCoins(int count = 100, string currency = "usd")
+    public async Task<List<Coin>> GetTopMarketCapCoins(int count = 100, string currency = "usd")
     {
         var query = HttpUtility.ParseQueryString(string.Empty);
         query["vs_currency"] = currency;
@@ -64,14 +64,14 @@ public class CoinGeckoClient : ICoinService
         var response = await GetAsync($"coins/markets?{query}");
         if (!response.IsSuccessStatusCode)
         {
-            return new List<CoinMinimal>();
+            return new List<Coin>();
         }
         
         var content = await response.Content.ReadAsStringAsync();
         
-        var coins = JsonSerializer.Deserialize<List<CoinMinimal>>(content);
+        var coins = JsonSerializer.Deserialize<List<Coin>>(content);
         
-        return coins ?? new List<CoinMinimal>();
+        return coins ?? new List<Coin>();
     }
 
     public async Task<Coin> GetCoinById(string id, string currency = "usd")

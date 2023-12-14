@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Web;
 using DCT_CryptoMonitor.Core.Models;
 using DCT_CryptoMonitor.Core.Services;
@@ -40,7 +41,7 @@ public class CoinCapClient : ICoinService
         return response.IsSuccessStatusCode;
     }
 
-    public async Task<List<CoinMinimal>> GetTopMarketCapCoins(int count = 100, string currency = "usd")
+    public async Task<List<Coin>> GetTopMarketCapCoins(int count = 100, string currency = "usd")
     {
         var query = HttpUtility.ParseQueryString(string.Empty);
         query["limit"] = count.ToString();
@@ -48,36 +49,48 @@ public class CoinCapClient : ICoinService
         var response = await GetAsync("assets", query);
         if (!response.IsSuccessStatusCode)
         {
-            return new List<CoinMinimal>();
+            return new List<Coin>();
         }
         
         var content = await response.Content.ReadAsStringAsync();
-        var data = JsonSerializer.Deserialize<JsonElement>(content);
+        var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
 
-        return data.GetProperty("data")
-            .EnumerateArray()
-            .Select(coin => new CoinMinimal
-            {
-                Id = coin.GetProperty("id").GetString()!,
-                Symbol = coin.GetProperty("symbol").GetString()!,
-                Name = coin.GetProperty("name").GetString()!,
-                CurrentPrice = ConvertCoinCapToDecimal(coin.GetProperty("priceUsd").GetString()!),
-                MarketCap = ConvertCoinCapToDecimal(coin.GetProperty("marketCapUsd").GetString()!),
-                MarketCapRank = Convert.ToInt32(coin.GetProperty("rank").GetString()),
-                PriceChangePercentage24H = ConvertCoinCapToDecimal(coin.GetProperty("changePercent24Hr").GetString()!),
-                Volume24H = ConvertCoinCapToDecimal(coin.GetProperty("volumeUsd24Hr").GetString()!),
-                Supply = ConvertCoinCapToDecimal(coin.GetProperty("supply").GetString()!)
-            })
+        return data.EnumerateArray()
+            .Select(coin => ConvertJsonToCoin(coin))
             .ToList();
     }
 
-    public async Task<Coin> GetCoinById(string id, string currency = "usd")
+    public async Task<Coin?> GetCoinById(string id, string currency = "usd")
     {
-        throw new NotImplementedException();
+        var response = await GetAsync($"assets/{id}");
+        if (response == null || !response.IsSuccessStatusCode)
+            return null;
+
+        var content = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
+
+        return ConvertJsonToCoin(data);
     }
     
     public static decimal ConvertCoinCapToDecimal(string value)
     {
         return value != null ? Convert.ToDecimal(value, CultureInfo.InvariantCulture) : 0;
+    }
+
+    public static Coin ConvertJsonToCoin(JsonElement json)
+    {
+        return new Coin
+        {
+            Id = json.GetProperty("id").GetString()!,
+            Symbol = json.GetProperty("symbol").GetString()!,
+            Name = json.GetProperty("name").GetString()!,
+            CurrentPrice = ConvertCoinCapToDecimal(json.GetProperty("priceUsd").GetString()!),
+            MarketCap = ConvertCoinCapToDecimal(json.GetProperty("marketCapUsd").GetString()!),
+            MarketCapRank = Convert.ToInt32(json.GetProperty("rank").GetString()),
+            PriceChangePercentage24H = ConvertCoinCapToDecimal(json.GetProperty("changePercent24Hr").GetString()!),
+            Volume24H = ConvertCoinCapToDecimal(json.GetProperty("volumeUsd24Hr").GetString()!),
+            Supply = ConvertCoinCapToDecimal(json.GetProperty("supply").GetString()!),
+            TotalSupply = ConvertCoinCapToDecimal(json.GetProperty("maxSupply").GetString()!)
+        };
     }
 }

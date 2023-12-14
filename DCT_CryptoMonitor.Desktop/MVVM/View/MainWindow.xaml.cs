@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using DCT_CryptoMonitor.Core.Models;
-using DCT_CryptoMonitor.Core.Services;
+﻿using System.Windows;
 using DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
 
 namespace DCT_CryptoMonitor.Desktop.MVVM.View;
@@ -11,30 +8,19 @@ namespace DCT_CryptoMonitor.Desktop.MVVM.View;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private readonly ICoinService _coinService;
+    private readonly MainViewModel _viewModel;
 
-    public MainWindow(ICoinService coinService)
+    
+    public MainWindow(MainViewModel viewModel)
     {
-        _coinService = coinService;
+        _viewModel = viewModel;
+        DataContext = viewModel;
         InitializeComponent();
     }
-    
-    protected override async void OnInitialized(EventArgs e)
-    {
-        var coins = await _coinService.GetTopMarketCapCoins();
-        DataContext = new MainViewModel
-        {
-            Coins = new ObservableCollection<CoinMinimal>(coins),
-            OneCoin = coins[0]
-        };
-        // add coin cards
-        
-        
-        base.OnInitialized(e);
-    }
 
-    private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    protected override void OnInitialized(EventArgs e)
     {
-        MessageBox.Show(await _coinService.Ping() ? "Ping successful" : "Ping failed");
+        _viewModel.Navigation.NavigateTo<HomeViewModel>();
+        base.OnInitialized(e);
     }
 }

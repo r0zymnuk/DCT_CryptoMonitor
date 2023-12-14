@@ -9,8 +9,7 @@ public class IsGainingConditionConverter : IValueConverter
         var sValue = value as string;
         if (!string.IsNullOrWhiteSpace(sValue)) 
         {
-            decimal.TryParse(sValue[1..^1], out var dValue);
-            return dValue > 0;
+            return sValue[0] == '+';
         }
         
         return false;
