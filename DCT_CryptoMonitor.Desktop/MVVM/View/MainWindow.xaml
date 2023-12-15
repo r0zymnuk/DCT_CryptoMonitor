@@ -36,11 +36,11 @@
 
                 <StackPanel Grid.Row="1">
                     <Button Content="Home"
-                            Height="25"
-                            Command="{Binding NavigateToHomeCommand}"/>
-                    <Button Content="Coins"
-                            Height="25"
-                            Command="{Binding NavigateToCoinCommand}"/>
+                            Height="30"
+                            Command="{Binding NavigateToHomeCommand}"
+                            Background="LightGray"
+                            FontSize="16"
+                            FontWeight="Medium"/>
                 </StackPanel>
             </Grid>
         </Border>

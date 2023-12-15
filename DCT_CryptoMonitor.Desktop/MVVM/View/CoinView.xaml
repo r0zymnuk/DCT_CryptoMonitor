@@ -3,19 +3,145 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
              xmlns:local="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.View"
+             xmlns:converters="clr-namespace:DCT_CryptoMonitor.Desktop.Converters"
              x:Name="CoinRoot"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             Background="Azure">
+             Background="White">
+    <UserControl.Resources>
+        <converters:CoinPriceConverter x:Key="CoinPriceConverter"/>
+        <converters:PercentageConverter x:Key="PercentageConverter"/>
+        <converters:MarketCapConverter x:Key="MarketCapConverter" />
+        <converters:IsGainingConditionConverter x:Key="IsGainingConditionConverter"/>
+        
+        <Style x:Key="CoinLossTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+
+        <Style x:Key="CoinGainTextStyle" TargetType="TextBlock" BasedOn="{StaticResource CoinLossTextStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, ElementName=PercentageChange24H, Converter={StaticResource IsGainingConditionConverter}}" Value="True">
+                    <Setter Property="Foreground" Value="Green"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-
-        <TextBlock Grid.Column="1" Text="Coin View"/>
-        <TextBlock Grid.Column="2" Text="{Binding Coin.Symbol, FallbackValue=Fallback}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Margin="25, 0, 0, 0">
+            <TextBlock Grid.Row="0"
+                       Text="{Binding Coin.MarketCapRank, FallbackValue=1}"
+                       FontSize="20" FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+            <Label Grid.Column="1" VerticalAlignment="Center">
+                <Label.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Coin.Symbol, FallbackValue=BTC}"
+                                   Margin="0,0,10,0"
+                                   FontSize="18" FontWeight="Bold"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Coin.Name, FallbackValue=Bitcoin}"
+                                   FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    
+                    </StackPanel>
+                </Label.Content>
+            </Label>
+        </StackPanel>
+        
+        <scottPlot:WpfPlot Grid.Row="1" Grid.Column="0" x:Name="CoinGraph"  ></scottPlot:WpfPlot>
+        
+        <StackPanel Grid.Row="1" Grid.Column="1"
+                    Margin="0,0,20,0">
+            <Border BorderThickness="0, 0, 0, 1.5"
+                    BorderBrush="Black"
+                    Margin="0, 5, 0, 0">
+                <Grid Margin="0, 0,0 ,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Price, USD"
+                               FontSize="14" FontWeight="SemiBold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Coin.CurrentPrice, Converter={StaticResource CoinPriceConverter}, FallbackValue=$0.00}"
+                               FontSize="16" FontWeight="SemiBold"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+            
+            <Border BorderThickness="0, 0, 0, 1.5"
+                    BorderBrush="Black"
+                    Margin="0, 5, 0, 0">
+                <Grid Margin="0, 0,0 ,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="24h, %"
+                               FontSize="14" FontWeight="SemiBold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" 
+                               Text="{Binding Coin.PriceChangePercentage24H, Converter={StaticResource PercentageConverter}, FallbackValue=0.0%}"
+                               Style="{StaticResource CoinGainTextStyle}"
+                               FontSize="16" FontWeight="SemiBold"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+            <Border BorderThickness="0, 0, 0, 1.5"
+                    BorderBrush="Black"
+                    Margin="0, 5, 0, 0">
+                <Grid Margin="0, 0,0 ,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*" />
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Volume, USD"
+                               FontSize="14" FontWeight="SemiBold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Coin.Volume24H, Converter={StaticResource MarketCapConverter}, FallbackValue=$0.00}"
+                               FontSize="16" FontWeight="SemiBold"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+            <Border BorderThickness="0, 0, 0, 1.5"
+                    BorderBrush="Black"
+                    Margin="0, 5, 0, 0">
+                <Grid Margin="0, 0,0 ,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*" />
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Market Cap, USD"
+                               FontSize="14" FontWeight="SemiBold"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Coin.MarketCap, Converter={StaticResource MarketCapConverter}, FallbackValue=$0.00}"
+                               FontSize="16" FontWeight="SemiBold"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </StackPanel>
     </Grid>
 </UserControl>

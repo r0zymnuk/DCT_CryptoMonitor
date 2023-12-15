@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Web;
 using DCT_CryptoMonitor.Core.Models;
+using DCT_CryptoMonitor.Core.Models.Enums;
 using DCT_CryptoMonitor.Core.Services;
 using DCT_CryptoMonitor.Infrastructure.Configurations;
 
@@ -63,13 +63,33 @@ public class CoinCapClient : ICoinService
     public async Task<Coin?> GetCoinById(string id, string currency = "usd")
     {
         var response = await GetAsync($"assets/{id}");
-        if (response == null || !response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode)
             return null;
 
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
 
         return ConvertJsonToCoin(data);
+    }
+
+    public async Task<List<PriceHistory>> GetPriceHistory(string id, DateTime start, DateTime end, PriceInterval interval = PriceInterval.h1)
+    {
+        var query = HttpUtility.ParseQueryString(string.Empty);
+        query["interval"] = interval.ToString();
+        query["start"] = ((DateTimeOffset)start).ToUnixTimeMilliseconds().ToString();
+        query["end"] = ((DateTimeOffset)end).ToUnixTimeMilliseconds().ToString();
+        
+        var response = await GetAsync($"assets/{id}/history", query);
+        if (response is not { IsSuccessStatusCode: true })
+            return new List<PriceHistory>();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
+        return data.EnumerateArray().Select(d => new PriceHistory
+        {
+            DateTime = DateTimeOffset.FromUnixTimeMilliseconds(d.GetProperty("time").GetInt64()).DateTime,
+            PriceUsd = ConvertCoinCapToDecimal(d.GetProperty("priceUsd").GetString()!)
+        }).ToList();
     }
     
     public static decimal ConvertCoinCapToDecimal(string value)

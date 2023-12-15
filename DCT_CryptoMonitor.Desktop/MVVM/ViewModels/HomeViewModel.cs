@@ -2,7 +2,6 @@
 using DCT_CryptoMonitor.Core.Services;
 using DCT_CryptoMonitor.Desktop.Core;
 using DCT_CryptoMonitor.Desktop.Services;
-using System.Windows;
 
 namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
 public class HomeViewModel : Core.ViewModel

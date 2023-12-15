@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Web;
 using DCT_CryptoMonitor.Core.Models;
+using DCT_CryptoMonitor.Core.Models.Enums;
 using DCT_CryptoMonitor.Core.Services;
 using DCT_CryptoMonitor.Infrastructure.Configurations;
 
@@ -75,6 +76,11 @@ public class CoinGeckoClient : ICoinService
     }
 
     public async Task<Coin> GetCoinById(string id, string currency = "usd")
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<PriceHistory>> GetPriceHistory(string id, DateTime start, DateTime end, PriceInterval interval = PriceInterval.h1)
     {
         throw new NotImplementedException();
     }
