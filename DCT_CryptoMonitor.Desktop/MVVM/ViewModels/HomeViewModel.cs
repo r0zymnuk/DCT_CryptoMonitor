@@ -3,11 +3,11 @@ using DCT_CryptoMonitor.Core.Services;
 using DCT_CryptoMonitor.Desktop.Core;
 using DCT_CryptoMonitor.Desktop.Services;
 
-namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
+namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
 public class HomeViewModel : Core.ViewModel
 {
     private List<Coin> _coins = new();
-    private INavigationService navigation;
+    private INavigationService _navigation;
 
     public List<Coin> Coins
     {
@@ -20,10 +20,10 @@ public class HomeViewModel : Core.ViewModel
     }
     public INavigationService Navigation 
     {
-        get => navigation;
+        get => _navigation;
         set
         {
-            navigation = value;
+            _navigation = value;
             OnPropertyChanged();
         }
     }

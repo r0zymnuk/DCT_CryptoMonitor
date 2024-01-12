@@ -2,13 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:view="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.View"
-             xmlns:viewModel="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.ViewModel">
+             xmlns:viewModels="clr-namespace:DCT_CryptoMonitor.Desktop.MVVM.ViewModels">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewModel:HomeViewModel}" >
+        <DataTemplate DataType="{x:Type viewModels:HomeViewModel}" >
             <view:HomeView/>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewModel:CoinViewModel}">
+        <DataTemplate DataType="{x:Type viewModels:CoinViewModel}">
             <view:CoinView/>
         </DataTemplate>
         <!--<ResourceDictionary>

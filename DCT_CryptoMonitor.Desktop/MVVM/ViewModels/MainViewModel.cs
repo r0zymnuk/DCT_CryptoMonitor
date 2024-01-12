@@ -2,7 +2,7 @@
 using DCT_CryptoMonitor.Desktop.Core;
 using DCT_CryptoMonitor.Desktop.Services;
 
-namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
+namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
 
 public class MainViewModel : Core.ViewModel
 {

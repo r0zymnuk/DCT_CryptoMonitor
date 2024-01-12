@@ -84,4 +84,19 @@ public class CoinGeckoClient : ICoinService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<List<Market>> GetMarkets(string coinId, int limit = 100, int offset = 0)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<Exchange>> GetExchanges()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Exchange> GetExchangeById(string id)
+    {
+        throw new NotImplementedException();
+    }
 }

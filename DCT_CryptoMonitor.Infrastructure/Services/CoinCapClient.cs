@@ -92,6 +92,79 @@ public class CoinCapClient : ICoinService
         }).ToList();
     }
     
+    public async Task<List<Market>> GetMarkets(string id, int count = 100, int offset = 0)
+    {
+        var query = HttpUtility.ParseQueryString(string.Empty);
+        query["limit"] = count.ToString();
+        query["offset"] = offset.ToString();
+        
+        var response = await GetAsync($"assets/{id}/markets", query);
+        if (!response.IsSuccessStatusCode)
+            return new List<Market>();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
+
+        return data.EnumerateArray()
+            .Select(market => new Market
+            {
+                ExchangeId = market.GetProperty("exchangeId").GetString()!,
+                BaseId = market.GetProperty("baseId").GetString()!,
+                BaseSymbol = market.GetProperty("baseSymbol").GetString()!,
+                QuoteId = market.GetProperty("quoteId").GetString()!,
+                QuoteSymbol = market.GetProperty("quoteSymbol").GetString()!,
+                Price = ConvertCoinCapToDecimal(market.GetProperty("priceUsd").GetString()!),
+                Volume24H = ConvertCoinCapToDecimal(market.GetProperty("volumeUsd24Hr").GetString()!),
+            })
+            .ToList();
+    }
+
+    public async Task<List<Exchange>> GetExchanges()
+    {
+        var response = await GetAsync("exchanges");
+        if (!response.IsSuccessStatusCode)
+            return new List<Exchange>();
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
+        
+        return data.EnumerateArray()
+            .Select(exchange => new Exchange
+            {
+                Id = exchange.GetProperty("id").GetString()!,
+                Name = exchange.GetProperty("name").GetString()!,
+                Rank = Convert.ToInt32(exchange.GetProperty("rank").GetString()),
+                PercentTotalVolume = ConvertCoinCapToDecimal(exchange.GetProperty("percentTotalVolume").GetString()!),
+                Volume = ConvertCoinCapToDecimal(exchange.GetProperty("volumeUsd").GetString()!),
+                TradingPairs = Convert.ToInt32(exchange.GetProperty("tradingPairs").GetString()),
+                Url = exchange.GetProperty("exchangeUrl").GetString()!,
+                Updated = DateTimeOffset.FromUnixTimeMilliseconds(exchange.GetProperty("updated").GetInt64()).DateTime
+            })
+            .ToList();
+    }
+
+    public async Task<Exchange?> GetExchangeById(string id)
+    {
+        var response = await GetAsync($"exchanges/{id}");
+        if (!response.IsSuccessStatusCode)
+            return null;
+        
+        var content = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
+        
+        return new Exchange
+        {
+            Id = data.GetProperty("id").GetString()!,
+            Name = data.GetProperty("name").GetString()!,
+            Rank = Convert.ToInt32(data.GetProperty("rank").GetString()),
+            PercentTotalVolume = ConvertCoinCapToDecimal(data.GetProperty("percentTotalVolume").GetString()!),
+            Volume = ConvertCoinCapToDecimal(data.GetProperty("volumeUsd").GetString()!),
+            TradingPairs = Convert.ToInt32(data.GetProperty("tradingPairs").GetString()),
+            Url = data.GetProperty("exchangeUrl").GetString()!,
+            Updated = DateTimeOffset.FromUnixTimeMilliseconds(data.GetProperty("updated").GetInt64()).DateTime
+        };
+    }
+
     public static decimal ConvertCoinCapToDecimal(string value)
     {
         return value != null ? Convert.ToDecimal(value, CultureInfo.InvariantCulture) : 0;

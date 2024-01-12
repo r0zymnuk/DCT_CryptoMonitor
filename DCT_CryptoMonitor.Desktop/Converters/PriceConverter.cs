@@ -2,7 +2,7 @@
 using System.Windows.Data;
 
 namespace DCT_CryptoMonitor.Desktop.Converters;
-public class CoinPriceConverter : IValueConverter
+public class PriceConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

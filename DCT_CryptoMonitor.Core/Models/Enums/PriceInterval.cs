@@ -1,7 +1,8 @@
 ﻿namespace DCT_CryptoMonitor.Core.Models.Enums;
 public enum PriceInterval
 {
-    m1,
+    /* For some currenly unknown reason this interval crashes the app */
+    /* m1, */
     m5,
     m15,
     m30,
@@ -9,5 +10,6 @@ public enum PriceInterval
     h2,
     h6,
     h12,
-    d1
+    /* For some currenly unknown reason this interval crashes the app */
+    /* d1 */
 }

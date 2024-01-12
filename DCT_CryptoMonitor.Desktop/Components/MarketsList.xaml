@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="DCT_CryptoMonitor.Desktop.Components.MarketsList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DCT_CryptoMonitor.Desktop.Components"
+             mc:Ignorable="d"
+             x:Name="MarketListControl"
+             d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignInstance}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Center" Margin="30, 0, 30, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Exchange" Grid.Column="0"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Left"/>
+
+            <TextBlock Text="Base / Quote" Grid.Column="1"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Right"/>
+
+            <TextBlock Text="Price, USD" Grid.Column="2"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Right"/>
+
+            <TextBlock Text="Volume 24h, USD" Grid.Column="3"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Right"/>
+        </Grid>
+
+        <ListBox ItemsSource="{Binding Markets, ElementName=MarketListControl}" Grid.Row="1"
+                 PreviewMouseWheel="ListBox_UnblockScroll"
+                 HorizontalAlignment="Stretch"
+                 HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MarketItem Market="{Binding}"
+                                      CoinService="{Binding CoinService, ElementName=MarketListControl}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
+    </Grid>
+</UserControl>
