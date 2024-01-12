@@ -1,10 +1,10 @@
 ﻿using System.Windows;
-using DCT_CryptoMonitor.Core.Models;
-using DCT_CryptoMonitor.Core.Models.Enums;
-using DCT_CryptoMonitor.Core.Services;
+using DCT_CryptoMonitor.Desktop.MVVM.Model;
+using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 using DCT_CryptoMonitor.Desktop.MVVM.View;
+using DCT_CryptoMonitor.Desktop.Services.Coins;
 
-namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
+namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
 public class CoinViewModel : Core.ViewModel
 {
     private Coin _coin = new();
@@ -29,51 +29,47 @@ public class CoinViewModel : Core.ViewModel
             Application.Current.Dispatcher.Invoke((Action)(() =>
             {
                 var coinView = Application.Current.Windows.OfType<CoinView>().FirstOrDefault();
-                if (coinView != null)
-                {
-                    coinView.PlotPriceHistory(_priceHistory.ToArray());
-                }
+                coinView?.RenderPriceChart();
             }));
             OnPropertyChanged();
         }
     }
 
-    public string CoinId
+    private readonly ICoinService _coinService;
+    private readonly string _coinId;
+    public PriceInterval Interval = PriceInterval.m30;
+    public DateTime fromDateTime = DateTime.Now.AddDays(-5);
+    public DateTime toDateTime = DateTime.Now;
+
+    private List<Market> _markets = new();
+
+    public List<Market> Markets
     {
-        get => _coinId;
+        get => _markets;
         set
         {
-            if (value == _coinId) return;
-            _coinId = value;
-            
+            _markets = value;
             OnPropertyChanged();
-            //new CoinView().PlotPriceHistory(PriceHistory.ToArray());
-            // Update the graph when PriceHistory is updated
         }
     }
 
-    private readonly ICoinService _coinService;
-    private string _coinId = "bitcoin";
 
     public CoinViewModel(ICoinService coinService, MainViewModel mainViewModel)
     {
         _coinService = coinService;
-        CoinId = mainViewModel.SelectedCoinId;
-        
-        /*Task.Run(async () => 
-        { 
-            Coin = await _coinService.GetCoinById(CoinId);
-            PriceHistory = await _coinService.GetPriceHistory(CoinId, DateTime.Today.AddDays(-5), DateTime.Now, PriceInterval.h1);
-        });*/
+        _coinId = mainViewModel.SelectedCoinId;
     }
 
     public async Task GetCoinData()
     {
-        Coin = await _coinService.GetCoinById(CoinId);
+        Coin = await _coinService.GetCoinById(_coinId);
+        await GetCoinHistoryData();
+        Markets = await _coinService.GetMarkets(_coinId);
     }
 
     public async Task GetCoinHistoryData()
     {
-        PriceHistory = await _coinService.GetPriceHistory(CoinId, DateTime.Today.AddDays(-5), DateTime.Now, PriceInterval.m30);
+        PriceHistory = await _coinService.GetPriceHistory(_coinId, fromDateTime, toDateTime, Interval);
     }
+    
 }

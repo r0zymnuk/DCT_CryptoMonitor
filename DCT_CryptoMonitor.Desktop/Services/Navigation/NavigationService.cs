@@ -1,6 +1,6 @@
 ﻿using DCT_CryptoMonitor.Desktop.Core;
 
-namespace DCT_CryptoMonitor.Desktop.Services;
+namespace DCT_CryptoMonitor.Desktop.Services.Navigation;
 public class NavigationService : ObservableObject, INavigationService
 {
     private ViewModel _currentView;
@@ -23,7 +23,7 @@ public class NavigationService : ObservableObject, INavigationService
 
     public void NavigateTo<TViewModel>() where TViewModel : ViewModel
     {
-        ViewModel viewModel =_viewModelFactory.Invoke(typeof(TViewModel));
+        ViewModel viewModel = _viewModelFactory.Invoke(typeof(TViewModel));
         CurrentView = viewModel;
     }
 }

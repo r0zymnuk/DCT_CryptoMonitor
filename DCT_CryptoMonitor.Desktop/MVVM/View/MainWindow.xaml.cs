@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
+using DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
 
 namespace DCT_CryptoMonitor.Desktop.MVVM.View;
 

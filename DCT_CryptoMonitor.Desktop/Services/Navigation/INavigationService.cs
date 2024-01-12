@@ -1,6 +1,6 @@
 ﻿using DCT_CryptoMonitor.Desktop.Core;
 
-namespace DCT_CryptoMonitor.Desktop.Services;
+namespace DCT_CryptoMonitor.Desktop.Services.Navigation;
 public interface INavigationService
 {
     ViewModel CurrentView { get; }

@@ -1,12 +1,12 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Web;
-using DCT_CryptoMonitor.Core.Models;
-using DCT_CryptoMonitor.Core.Models.Enums;
-using DCT_CryptoMonitor.Core.Services;
-using DCT_CryptoMonitor.Infrastructure.Configurations;
+using DCT_CryptoMonitor.Desktop.Configurations;
+using DCT_CryptoMonitor.Desktop.MVVM.Model;
+using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 
-namespace DCT_CryptoMonitor.Infrastructure.Services;
+namespace DCT_CryptoMonitor.Desktop.Services.Coins;
 
 public class CoinGeckoClient : ICoinService
 {
@@ -22,19 +22,19 @@ public class CoinGeckoClient : ICoinService
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         // ping
         var ping = GetAsync("ping").Result;
-        
+
         ping.EnsureSuccessStatusCode();
     }
-    
+
     private Task<HttpResponseMessage> GetAsync(string url)
     {
         var uri = new Uri(_httpClient.BaseAddress!, url);
-        
+
         var query = HttpUtility.ParseQueryString(uri.Query);
         query["x_cg_demo_api_key"] = _apiKey;
-        
-        uri = new UriBuilder(uri) {Query = query.ToString()}.Uri;
-        
+
+        uri = new UriBuilder(uri) { Query = query.ToString() }.Uri;
+
         return _httpClient.GetAsync(uri);
     }
 
@@ -61,17 +61,17 @@ public class CoinGeckoClient : ICoinService
         query["page"] = "1";
         query["sparkline"] = "false";
         query["precision"] = "2";
-        
+
         var response = await GetAsync($"coins/markets?{query}");
         if (!response.IsSuccessStatusCode)
         {
             return new List<Coin>();
         }
-        
+
         var content = await response.Content.ReadAsStringAsync();
-        
+
         var coins = JsonSerializer.Deserialize<List<Coin>>(content);
-        
+
         return coins ?? new List<Coin>();
     }
 

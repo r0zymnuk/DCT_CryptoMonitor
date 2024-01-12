@@ -8,7 +8,7 @@
              d:DesignHeight="40" d:DesignWidth="700"
              Background="Transparent">
     <UserControl.Resources>
-        <converters:CoinPriceConverter x:Key="CoinPriceConverter"/>
+        <converters:PriceConverter x:Key="CoinPriceConverter"/>
         <converters:PercentageConverter x:Key="PercentageConverter"/>
         <converters:MarketCapConverter x:Key="MarketCapConverter" />
         <converters:IsGainingConditionConverter x:Key="IsGainingConditionConverter"/>

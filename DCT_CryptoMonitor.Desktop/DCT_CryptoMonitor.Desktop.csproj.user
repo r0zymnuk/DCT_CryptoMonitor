@@ -5,7 +5,13 @@
     <Compile Update="Components\CoinCardList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Components\DateTimePicker.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\View\CoinView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\View\ExchangeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\View\HomeView.xaml.cs">
@@ -16,7 +22,13 @@
     <Page Update="Components\CoinCardList.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Components\DateTimePicker.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MVVM\View\CoinView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\ExchangeView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\HomeView.xaml">

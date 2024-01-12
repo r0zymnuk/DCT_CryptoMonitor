@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="DCT_CryptoMonitor.Desktop.Components.DateTimePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DCT_CryptoMonitor.Desktop.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="25" d:DesignWidth="250">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <DatePicker x:Name="datePicker" Text=""
+                    SelectedDateChanged="SelectedDateChanged"
+                    VerticalContentAlignment="Center"/>
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            
+            <ComboBox x:Name="hoursComboBox"
+                      VerticalContentAlignment="Center"/>
+            
+            <ComboBox Grid.Column="2" x:Name="minutesComboBox"
+                      VerticalContentAlignment="Center"/>
+        </Grid>
+    </Grid>
+</UserControl>

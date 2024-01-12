@@ -1,8 +1,8 @@
-﻿using DCT_CryptoMonitor.Core.Services;
-using DCT_CryptoMonitor.Desktop.Core;
-using DCT_CryptoMonitor.Desktop.Services;
+﻿using DCT_CryptoMonitor.Desktop.Core;
+using DCT_CryptoMonitor.Desktop.Services.Coins;
+using DCT_CryptoMonitor.Desktop.Services.Navigation;
 
-namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModel;
+namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
 
 public class MainViewModel : Core.ViewModel
 {

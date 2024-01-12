@@ -1,10 +1,14 @@
 ﻿using System.Collections.Specialized;
 using System.Globalization;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
 using System.Web;
+using DCT_CryptoMonitor.Desktop.Configurations;
+using DCT_CryptoMonitor.Desktop.MVVM.Model;
+using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 
-namespace DCT_CryptoMonitor.Des
+namespace DCT_CryptoMonitor.Desktop.Services.Coins;
 
 public class CoinCapClient : ICoinService
 {
@@ -17,18 +21,18 @@ public class CoinCapClient : ICoinService
         // add bearer token
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiOptions.ApiKey}");
         // ping
-        
+
         if (_httpClient.GetAsync("assets").Result.StatusCode != HttpStatusCode.OK)
         {
             throw new Exception("CoinCap ping failed");
         }
     }
-    
+
     private async Task<HttpResponseMessage> GetAsync(string url, NameValueCollection? query = null)
     {
         var uri = new Uri(_httpClient.BaseAddress!, url);
-        
-        return await _httpClient.GetAsync(new UriBuilder(uri) {Query = query?.ToString()}.Uri);
+
+        return await _httpClient.GetAsync(new UriBuilder(uri) { Query = query?.ToString() }.Uri);
     }
 
     public async Task<bool> Ping()
@@ -41,13 +45,13 @@ public class CoinCapClient : ICoinService
     {
         var query = HttpUtility.ParseQueryString(string.Empty);
         query["limit"] = count.ToString();
-        
+
         var response = await GetAsync("assets", query);
         if (!response.IsSuccessStatusCode)
         {
             return new List<Coin>();
         }
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
 
@@ -74,11 +78,11 @@ public class CoinCapClient : ICoinService
         query["interval"] = interval.ToString();
         query["start"] = ((DateTimeOffset)start).ToUnixTimeMilliseconds().ToString();
         query["end"] = ((DateTimeOffset)end).ToUnixTimeMilliseconds().ToString();
-        
+
         var response = await GetAsync($"assets/{id}/history", query);
         if (response is not { IsSuccessStatusCode: true })
             return new List<PriceHistory>();
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
         return data.EnumerateArray().Select(d => new PriceHistory
@@ -87,17 +91,17 @@ public class CoinCapClient : ICoinService
             PriceUsd = ConvertCoinCapToDecimal(d.GetProperty("priceUsd").GetString()!)
         }).ToList();
     }
-    
+
     public async Task<List<Market>> GetMarkets(string id, int count = 100, int offset = 0)
     {
         var query = HttpUtility.ParseQueryString(string.Empty);
         query["limit"] = count.ToString();
         query["offset"] = offset.ToString();
-        
+
         var response = await GetAsync($"assets/{id}/markets", query);
         if (!response.IsSuccessStatusCode)
             return new List<Market>();
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
 
@@ -120,10 +124,10 @@ public class CoinCapClient : ICoinService
         var response = await GetAsync("exchanges");
         if (!response.IsSuccessStatusCode)
             return new List<Exchange>();
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
-        
+
         return data.EnumerateArray()
             .Select(exchange => new Exchange
             {
@@ -144,10 +148,10 @@ public class CoinCapClient : ICoinService
         var response = await GetAsync($"exchanges/{id}");
         if (!response.IsSuccessStatusCode)
             return null;
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<JsonElement>(content).GetProperty("data");
-        
+
         return new Exchange
         {
             Id = data.GetProperty("id").GetString()!,
