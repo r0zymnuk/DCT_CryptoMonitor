@@ -1,0 +1,102 @@
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Web;
+using DCT_CryptoMonitor.Desktop.Configurations;
+using DCT_CryptoMonitor.Desktop.MVVM.Model;
+using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
+
+namespace DCT_CryptoMonitor.Desktop.Services.Coins;
+
+public class CoinGeckoClient : ICoinService
+{
+    private readonly HttpClient _httpClient;
+    private readonly string _apiKey;
+
+    public CoinGeckoClient(HttpClient httpClient, ApiOptions apiOptions)
+    {
+        _httpClient = httpClient;
+        _apiKey = apiOptions.ApiKey;
+        _httpClient.BaseAddress = new Uri(apiOptions.Url);
+        _httpClient.DefaultRequestHeaders.Add("x_cg_demo_api_key", _apiKey);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+        // ping
+        var ping = GetAsync("ping").Result;
+
+        ping.EnsureSuccessStatusCode();
+    }
+
+    private Task<HttpResponseMessage> GetAsync(string url)
+    {
+        var uri = new Uri(_httpClient.BaseAddress!, url);
+
+        var query = HttpUtility.ParseQueryString(uri.Query);
+        query["x_cg_demo_api_key"] = _apiKey;
+
+        uri = new UriBuilder(uri) { Query = query.ToString() }.Uri;
+
+        return _httpClient.GetAsync(uri);
+    }
+
+    public async Task<bool> Ping()
+    {
+        var response = await GetAsync("ping");
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<List<string>> GetSupportedVsCurrencies()
+    {
+        var response = await GetAsync("simple/supported_vs_currencies");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<List<string>>(content) ?? new List<string>();
+    }
+
+    public async Task<List<Coin>> GetTopMarketCapCoins(int count = 100, string currency = "usd")
+    {
+        var query = HttpUtility.ParseQueryString(string.Empty);
+        query["vs_currency"] = currency;
+        query["order"] = "market_cap_desc";
+        query["per_page"] = count.ToString();
+        query["page"] = "1";
+        query["sparkline"] = "false";
+        query["precision"] = "2";
+
+        var response = await GetAsync($"coins/markets?{query}");
+        if (!response.IsSuccessStatusCode)
+        {
+            return new List<Coin>();
+        }
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        var coins = JsonSerializer.Deserialize<List<Coin>>(content);
+
+        return coins ?? new List<Coin>();
+    }
+
+    public async Task<Coin> GetCoinById(string id, string currency = "usd")
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<PriceHistory>> GetPriceHistory(string id, DateTime start, DateTime end, PriceInterval interval = PriceInterval.h1)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<Market>> GetMarkets(string coinId, int limit = 100, int offset = 0)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<Exchange>> GetExchanges()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Exchange> GetExchangeById(string id)
+    {
+        throw new NotImplementedException();
+    }
+}

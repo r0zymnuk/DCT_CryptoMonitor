@@ -1,4 +1,4 @@
-﻿using DCT_CryptoMonitor.Core.Models.Enums;
+﻿using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 using System.Globalization;
 using System.Windows.Data;
 

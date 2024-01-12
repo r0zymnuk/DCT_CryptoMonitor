@@ -1,4 +1,4 @@
-﻿using DCT_CryptoMonitor.Core.Models;
+﻿using DCT_CryptoMonitor.Desktop.MVVM.Model;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

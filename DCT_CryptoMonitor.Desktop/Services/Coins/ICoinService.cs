@@ -1,7 +1,7 @@
-﻿using DCT_CryptoMonitor.Core.Models;
-using DCT_CryptoMonitor.Core.Models.Enums;
+﻿using DCT_CryptoMonitor.Desktop.MVVM.Model;
+using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 
-namespace DCT_CryptoMonitor.Core.Services;
+namespace DCT_CryptoMonitor.Desktop.Services.Coins;
 
 public interface ICoinService
 {

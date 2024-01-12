@@ -1,15 +1,13 @@
 ﻿using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using DCT_CryptoMonitor.Core.Services;
-using DCT_CryptoMonitor.Desktop.Components;
 using DCT_CryptoMonitor.Desktop.MVVM.View;
-using DCT_CryptoMonitor.Infrastructure.Configurations;
-using DCT_CryptoMonitor.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using DCT_CryptoMonitor.Desktop.Core;
 using DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
-using DCT_CryptoMonitor.Desktop.Services;
+using DCT_CryptoMonitor.Desktop.Services.Navigation;
+using DCT_CryptoMonitor.Desktop.Services.Coins;
+using DCT_CryptoMonitor.Desktop.Configurations;
 
 namespace DCT_CryptoMonitor.Desktop;
 

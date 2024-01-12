@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
-using DCT_CryptoMonitor.Core.Models;
-using DCT_CryptoMonitor.Core.Models.Enums;
+using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 using DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
 
 namespace DCT_CryptoMonitor.Desktop.MVVM.View;

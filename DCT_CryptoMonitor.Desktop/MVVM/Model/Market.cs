@@ -1,4 +1,4 @@
-﻿namespace DCT_CryptoMonitor.Core.Models;
+﻿namespace DCT_CryptoMonitor.Desktop.MVVM.Model;
 
 public class Market
 {

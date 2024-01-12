@@ -1,4 +1,4 @@
-﻿namespace DCT_CryptoMonitor.Core.Models.Enums;
+﻿namespace DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 public enum PriceInterval
 {
     /* For some currenly unknown reason this interval crashes the app */

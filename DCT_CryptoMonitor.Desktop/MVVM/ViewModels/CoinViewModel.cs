@@ -1,9 +1,8 @@
 ﻿using System.Windows;
-using DCT_CryptoMonitor.Core.Models;
-using DCT_CryptoMonitor.Core.Models.Enums;
-using DCT_CryptoMonitor.Core.Services;
+using DCT_CryptoMonitor.Desktop.MVVM.Model;
+using DCT_CryptoMonitor.Desktop.MVVM.Model.Enums;
 using DCT_CryptoMonitor.Desktop.MVVM.View;
-using ScottPlot.Plottable;
+using DCT_CryptoMonitor.Desktop.Services.Coins;
 
 namespace DCT_CryptoMonitor.Desktop.MVVM.ViewModels;
 public class CoinViewModel : Core.ViewModel
@@ -30,10 +29,7 @@ public class CoinViewModel : Core.ViewModel
             Application.Current.Dispatcher.Invoke((Action)(() =>
             {
                 var coinView = Application.Current.Windows.OfType<CoinView>().FirstOrDefault();
-                if (coinView != null)
-                {
-                    coinView.RenderPriceChart();
-                }
+                coinView?.RenderPriceChart();
             }));
             OnPropertyChanged();
         }

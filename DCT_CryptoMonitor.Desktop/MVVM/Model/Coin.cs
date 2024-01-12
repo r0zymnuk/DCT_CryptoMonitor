@@ -1,4 +1,4 @@
-﻿namespace DCT_CryptoMonitor.Core.Models;
+﻿namespace DCT_CryptoMonitor.Desktop.MVVM.Model;
 
 public class Coin
 {
@@ -11,5 +11,5 @@ public class Coin
     public decimal PriceChangePercentage24H { get; set; }
     public decimal Volume24H { get; set; }
     public decimal Supply { get; set; }
-    public decimal TotalSupply { get; set;}
+    public decimal TotalSupply { get; set; }
 }

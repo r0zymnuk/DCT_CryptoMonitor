@@ -1,9 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using DCT_CryptoMonitor.Core.Models;
-using DCT_CryptoMonitor.Core.Services;
-using DCT_CryptoMonitor.Infrastructure.Services;
+using DCT_CryptoMonitor.Desktop.MVVM.Model;
+using DCT_CryptoMonitor.Desktop.Services.Coins;
 
 namespace DCT_CryptoMonitor.Desktop.Components;
 

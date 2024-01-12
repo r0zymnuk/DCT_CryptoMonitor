@@ -1,9 +1,9 @@
-﻿namespace DCT_CryptoMonitor.Core.Models;
+﻿namespace DCT_CryptoMonitor.Desktop.MVVM.Model;
 public struct PriceHistory : IComparable<PriceHistory>
 {
     public decimal PriceUsd { get; set; }
     public DateTime DateTime { get; set; }
-    
+
     public override string ToString()
     {
         return $"{DateTime} - {PriceUsd}";
